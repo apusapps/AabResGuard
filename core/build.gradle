@@ -1,12 +1,11 @@
 buildscript {
     repositories {
-        jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
-        classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.8"
+        classpath "com.google.protobuf:protobuf-gradle-plugin:0.9.4"
     }
 }
 
@@ -16,6 +15,10 @@ apply plugin: "com.github.johnrengelman.shadow"
 apply from: rootProject.file('gradle/publish-shadow.gradle')
 
 [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+//fix sourcesJar and protobuf error
+//see https://github.com/google/protobuf-gradle-plugin/issues/591
+tasks.named("sourcesJar").configure { dependsOn("classes") }
 
 configurations.all {
     resolutionStrategy.dependencySubstitution {
@@ -30,7 +33,7 @@ dependencies {
 
     compileOnly "com.android.tools.build:aapt2-proto:0.4.0"
     compileOnly gradleApi()
-//    compile deps.gradle.agp
+//    implementation deps.gradle.agp
 
     implementation "com.android.support:support-annotations:24.2.0"
     shadow 'commons-io:commons-io:2.6'
@@ -42,6 +45,7 @@ dependencies {
     shadow group: 'org.dom4j', name: 'dom4j', version: '2.1.0'
     shadow deps.bundletool
 
+    testImplementation deps.bundletool
     testImplementation deps.gradle.agp
     testImplementation "com.android.tools.build:aapt2-proto:0.4.0"
     testImplementation group: 'org.dom4j', name: 'dom4j', version: '2.1.0'
@@ -62,9 +66,9 @@ protobuf {
 }
 
 shadowJar {
-    baseName = "AabResGuard"
+    archiveBaseName = "AabResGuard"
     version = versions[ARTIFACT_ID]
-    classifier = ''
+    archiveClassifier = ''
 
     minimize()
 

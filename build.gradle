@@ -3,9 +3,9 @@
 buildscript {
     apply from: rootProject.file("gradle/config.gradle")
     repositories {
+        mavenCentral()
         google()
-        jcenter()
-        if ("true".equalsIgnoreCase(System.getProperty('useLocalMaven', "false"))) {
+            if ("true".equalsIgnoreCase(System.getProperty('useLocalMaven', "false"))) {
             println "use local repo"
             mavenLocal()
         } else {
@@ -18,9 +18,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath deps.plugin.digital
         classpath deps.plugin.shadow
-        classpath deps.plugin['bintray-plugin']
         classpath deps.gradle.agp
         classpath deps.kotlin.plugin
 
@@ -32,13 +30,14 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenLocal()
+        mavenCentral()
         google()
-        jcenter()
         if ("true".equalsIgnoreCase(System.getProperty('useLocalMaven', "false"))) {
             mavenLocal()
         } else {
-            maven { url findProperty("RELEASE_REPOSITORY_URL") }
-            maven { url findProperty("SNAPSHOT_REPOSITORY_URL") }
+            maven { url RELEASE_REPOSITORY_URL }
+            maven { url SNAPSHOT_REPOSITORY_URL }
         }
     }
 }

@@ -2,9 +2,15 @@ apply plugin: 'com.android.application'
 apply from: "$rootDir/gradle/aabresguard.gradle"
 
 android {
+
+    namespace "com.bytedance.android.app"
+
     compileSdkVersion versions.compileSdkVersion
 
     defaultConfig {
+
+        applicationId "com.bytedance.android.app"
+
         minSdkVersion versions.minSdkVersion
         targetSdkVersion versions.targetSdkVersion
         versionCode 1
@@ -44,5 +50,4 @@ dependencies {
     implementation 'com.mikepenz:ionicons-typeface:2.0.1.5-kotlin@aar'
     implementation 'com.mikepenz:pixeden-7-stroke-typeface:1.2.0.3-kotlin@aar'
     implementation 'com.mikepenz:material-design-icons-dx-typeface:5.0.1.0-kotlin@aar'
-    compileOnly deps.plugin['bintray-plugin']
 }
